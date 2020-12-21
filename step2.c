@@ -3,6 +3,16 @@
 #include<string.h>
 #include <sys/stat.h>
 
+
+int min(int x, int y, int z){
+	if(x<y && x<z)
+		return x;
+	else if(y<x && y<z)	
+		return y;
+	else if(z<x && z<y)
+		return z;		
+}	
+
 int find(char*codon, char*seq){
 
 	unsigned char found = 0;
@@ -20,7 +30,7 @@ int find(char*codon, char*seq){
 
 struct stat st;
 
-char get_carGenome(char *fp){
+char *get_carGenome(char *fp){
 FILE * file;
 file = fopen(fp, "r");
 
@@ -38,18 +48,29 @@ file = fopen(fp, "r");
 
          i++;
     }	
-  printf("%d", find("ATG", carFile));
-     
+
+    return carFile; 
    fclose(file); 
 
 }
 
 
 int main(){
- 
- get_carGenome("MT873231.1");
-
-   }	
+ 		
+ 	int gene_start, gene_stop;
+ 	int gene_stop1, gene_stop2, gene_stop3;
+ 	
+  gene_start = find("ATG", get_carGenome("demo.txt"));
+      printf("gene_start : %d\n",gene_start);
+   //
+   gene_stop1 = find("UGA", get_carGenome("demo.txt")+ gene_start);
+         printf("gene_stop1 : %d\n",gene_stop1);
+   gene_stop2 = find("UAG", get_carGenome("demo.txt")+ gene_start);
+            printf("gene_stop2 : %d\n",gene_stop2);
+   gene_stop3 = find("UAA", get_carGenome("demo.txt")+ gene_start);
+ 	         printf("gene_stop3 : %d\n",gene_stop3);
+ 	printf("%d", min(gene_stop1,gene_stop2,gene_stop3));
+ }	
 	
 
  
